@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2>User Registeration</h2>
+        <div id="contentWrapper">
+            <div class="inputWrp">
+                <label for="fname">Name:</label>
+                <input type="text" placeholder="Enter name" id="name" name="fname"><br>
+            </div>
+            <div class="inputWrp">
+                <label for="lname">Email:</label>
+                <input id="eml" type="email" required placeholder="Enter email@" name="Email"><br>
+            </div>
+            <div class="inputWrp">
+                <label for="lname">Phone:</label>
+                <input id="tel" type="number" placeholder="Enter Phone Number" name="Phone-Number">
+                <br>
+            </div>
+            <div class="inputWrp">
+                <label for="lname">Address:</label>
+                <input type="text" id="address" placeholder="Enter Address" name="lname">
+                <br>
+            </div>
+            <button id="submitBtn" onclick="getData()"> Add </button>
+        </div>
+        <br />
+        <div class="dataTable" id="dataTable">
+            <div class="searchBar">
+                <input id="searchInput" class="searchInput" onkeyup="filtredVal()" type="text"
+                    placeholder="Search user..">
+            </div>
+            <br />
+            <hr />
+            <br />
+            <table id="exampl" class="table cell-border " style="width:100%">
+                <thead class="TableHead">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+<script>
+    var addedItems = [];
+    // getting input value
+    function getData() {
+        const name = document.getElementById('name').value;
+        const phoneNo = document.getElementById('tel').value;
+        const email = document.getElementById('eml').value;
+        const address = document.getElementById('address').value;
+        addedItems.push({ name, phoneNo, email, address });
+        console.log("addItms", addedItems);
+        // Update table
+        var table = document.getElementById("exampl")
+        var tr = document.createElement('tr');
+        var td1 = document.createElement('td');
+        var td2 = document.createElement('td');
+        var td3 = document.createElement('td');
+        var td4 = document.createElement('td');
+        var td5 = document.createElement('td');
+        var text1 = document.createTextNode(name);
+        var text2 = document.createTextNode(email);
+        var text4 = document.createTextNode(phoneNo);
+        var text3 = document.createTextNode(address);
+        var deleteBtn = document.createElement("button");
+        deleteBtn.id = name;
+        deleteBtn.className = "deleteBtn";
+        deleteBtn.onclick = function DeleteIt(val) {
+            // TODO: code to delete row
+            tr.remove();
+        }
+        deleteBtn.textContent = "DELETE"
+        td1.appendChild(text1);
+        td1.id = name
+        td2.appendChild(text2);
+        td3.appendChild(text3);
+        td4.appendChild(text4);
+        td5.appendChild(deleteBtn)
+        tr.id = name
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        tr.appendChild(td4);
+        tr.appendChild(td5);
+        table.appendChild(tr);
+        // clear inputs
+        for (i = 0; i <= document.getElementsByTagName('input').length; i++) {
+            document.getElementsByTagName('input')[i].value = "";
+        }
+    }
+    //Filter results
+    function filtredVal() {
+        let searchedItem = document.getElementById('searchInput').value;
+        // filter array which do not have searched term
+        const filterVal = addedItems.filter(data => !data.name.includes(searchedItem))
+        
+        if(!filterVal.length) {
+            let items = document.getElementsByTagName("tr");
+            for(i=0; i<= addedItems.length; i++) {
+                let tRow = document.getElementById(addedItems[i].name);
+                document.getElementById(tRow.id).style.display = "table-row";
+            }
+        }
+        for(i=0; i<= filterVal.length; i++) {
+            const rowDel = document.getElementById(filterVal[i].name);
+            document.getElementById(rowDel.id).style.display = "none";
+        }
+
+        // if filteredArray has no length bring back elements
+
+        // loop thru filter array and display none items by there id
+    }
+</script>
+
+</html>

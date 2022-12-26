@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div id="contentWrapper">
+            <label for="Todo">Enter To-Do:</label>
+            <input type="text" id="Todo" name="fname" placeholder="enter your todo"><br><br>
+            <button id="addData" onclick="getVal()">
+                Add
+            </button>
+        </div>
+        <div class="toDoList">
+            <ul id="todoItems"></ul>
+        </div>
+        <div id="buttonBox" class="buttonBox">
+            <button id="cmpAll" onclick="CompleteAll()">Complete All</button>
+            <button id="dellAll" onclick="DeleteAll()">Delete All</button>
+        </div>
+    </div>
+</body>
+
+<script>
+    // getting input value
+    var addedItems = [];
+    function getVal(event) {
+        let val = document.getElementById('Todo').value;
+        if (val.length) {
+            var item = document.createElement('li');
+            item.setAttribute('class', "dataList");
+            item.setAttribute('id', val);
+            item.textContent = val;
+            addedItems.push({
+                "Todo": val,
+                "checked": false
+            });
+            document.getElementById('todoItems').appendChild(item);
+            document.getElementById('Todo').value = "";
+            //create checkBox
+            var checkbox = document.createElement('input');
+            // Assigning the attributes
+            // to created checkbox
+            checkbox.type = "checkbox";
+            checkbox.name = "name";
+            checkbox.value = "value";
+            checkbox.id = val;
+            checkbox.onclick = function CompleteIt(val) {
+                let item = document.getElementById(checkbox.id)
+                if (item.style.textDecoration == 'line-through') {
+                    item.style.textDecoration = ''
+                } else {
+                    item.style.textDecoration = 'line-through'
+                }
+            }
+            item.appendChild(checkbox);
+            //add delete btn
+            var deleteBtn = document.createElement('button');
+            // Assigning the attributes
+            deleteBtn.id = val;
+            deleteBtn.className = "deleteBtn";
+            deleteBtn.onclick = function DeleteIt(val) {
+                let item = document.getElementById(deleteBtn.id)
+                item.remove();
+            }
+            item.appendChild(deleteBtn);
+            var buttonBox = document.getElementById('buttonBox');
+            buttonBox.style.display = "flex";
+        } else {
+            alert("add a todo")
+        }
+    }
+    //Complete all
+    function CompleteAll() {
+        const boxes = document.querySelectorAll('.dataList');
+        for (i = 0; i <= boxes.length; i++) {
+            console.log(" boxes[i]", boxes[i].id);
+            let item = document.getElementById(boxes[i].id)
+            item.style.textDecoration = 'line-through'
+        }
+    }
+    //Delete all 
+    function DeleteAll() {
+        const data = document.querySelectorAll('.deleteBtn');
+        for (i = 0; i <= data.length; i++) {
+            console.log(" items[i]", data[i].id);
+            let item = document.getElementById(data[i].id)
+            item.remove();
+            var buttonBox = document.getElementById('buttonBox');
+            buttonBox.style.display = "none";
+        }
+    }
+</script>
+
+</html>

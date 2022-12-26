@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <header>
+        <h3>Flipkart Store</h3>
+        <div id="cart_section" class="cart_section">
+            <p id='logo_wrapper' onclick="ToggleCart()">
+                <img src="https://cdn-icons-png.flaticon.com/512/263/263142.png" class="logo_image">
+            <div id="counterList" class="counterList"></div>
+            </p>
+            <div id="dropdown" class="dropdown insideCart">
+                <p class="insideCart">Items in cart</p>
+                <ul class="insideCart" id="cart_items_list"></ul>
+            </div>
+        </div>
+    </header>
+    <hr />
+    <div class="contentWrapper">
+        <div id="productsData" class="tabs">
+            <ul id="list" class="list">
+            </ul>
+        </div>
+    </div>
+</body>
+
+<script>
+    var products = [
+        { name: "Micromax", price: 100 },
+        { name: "Iphone", price: 800 },
+        { name: "Samsung", price: 400 }
+    ]
+
+    var cartItems = []
+
+    //insert all products on screen inside productsData div
+    const data = products.map((data) => {
+        var link1 = document.createElement('p');
+        var link2 = document.createElement('p');
+        var link3 = document.createElement('button');
+        link3.setAttribute("class", "buttonCart");
+        link3.setAttribute("id", data.name);
+        var item = document.createElement('li');
+        link1.textContent = data.name;
+        link2.textContent = data.price;
+        link3.textContent = "Add To Cart"
+        item.appendChild(link1);
+        item.appendChild(link2);
+        item.appendChild(link3);
+        //console.log("data.name", data.name);
+        document.getElementById('list').appendChild(item);
+    });
+
+    //create cart dropdown
+    function ToggleCart() {
+        var styleType = document.getElementById('dropdown').style.display
+        if (styleType == "block") {
+            document.getElementById('dropdown').style.display = "none"
+        } else {
+            document.getElementById('dropdown').style.display = "block"
+        }
+    }
+
+    document.addEventListener('mouseup', function(e) {
+    var container = document.getElementById('cart_section');
+        if (!container.contains(e.target)) {
+            document.getElementById('dropdown').style.display = 'none';
+        }
+    });
+
+    //add and remove products in cart and from productsData div
+    document.addEventListener("click", function (event) {
+        var targetElement = event.target || event.srcElement;
+        if (targetElement.classList[0] === 'buttonCart') {
+            //var cartItem = document.createElement('li');
+            let ElementId = targetElement.id
+            products.filter(data => {
+                if (data.name === ElementId && !cartItems.includes(data)) {
+                    cartItems.push(data);
+                    showCartItems(data);
+                } else if (data.name === ElementId && cartItems.includes(data)) {
+                    alert("already exist !!")
+                }
+            })
+            var count = 0;
+            var cartCount = document.getElementById('counterList');
+            cartCount.innerHTML = cartItems.length;
+            console.log(cartItems.length);
+
+
+        }
+        else if (targetElement.classList[0] === 'deleteItem') {
+            let ElementsId = targetElement.id
+            console.log("Delete Btn", ElementsId);
+            // create new array of updated cart
+            const updatedArray = cartItems.filter(data => data.name != ElementsId)
+            console.log("Updated List", updatedArray)
+            cartItems = updatedArray;
+            var cartCount = document.getElementById('counterList');
+            cartCount.innerHTML = cartItems.length;
+            console.log("CartItems", cartItems)
+            const deleteList = document.getElementById("cart_items_list");
+            deleteList.innerHTML = ""
+            cartItems.map((item) => {
+                var selectedIitem = document.createElement('li');
+                var link4 = document.createElement('button');
+                selectedIitem.setAttribute("id", item.name);
+                link4.textContent = "Del"
+                link4.setAttribute("class", "deleteItem");
+                link4.setAttribute("id", item.name);
+                selectedIitem.textContent = "Name:" + item.name + " " + "Price:" + item.price;
+                document.getElementById('cart_items_list').appendChild(selectedIitem);
+                selectedIitem.appendChild(link4);
+            })
+            // recreate list and append in dom with updated cart array
+        } 
+    });
+
+    function showCartItems(selectedItemId) {
+        var selectedIitem = document.createElement('li');
+        var link4 = document.createElement('button');
+        selectedIitem.setAttribute("id", selectedItemId.name);
+        link4.textContent = "Del"
+        link4.setAttribute("class", "deleteItem");
+        link4.setAttribute("id", selectedItemId.name);
+        selectedIitem.textContent = "Name:" + selectedItemId.name + " " + "Price:" + selectedItemId.price;
+        document.getElementById('cart_items_list').appendChild(selectedIitem);
+        selectedIitem.appendChild(link4);
+    }
+
+</script>
+
+</html>
